@@ -38,6 +38,13 @@
   if (fill && pct && !reducedMotion) {
     var progress = 0;
     var target = 87;
+    // this deferred script runs before first paint, so reset the CSS 87%
+    // fallback to 0 without a visible backwards jump
+    fill.style.transition = "none";
+    fill.style.width = "0%";
+    pct.textContent = "0%";
+    void fill.offsetWidth;
+    fill.style.transition = "";
     var tick = setInterval(function () {
       progress += Math.max(1, Math.round((target - progress) / 8));
       if (progress >= target) {
@@ -56,7 +63,7 @@
   }
 
   if (msg && !reducedMotion) {
-    var mi = 0;
+    var mi = 2; // index of the message already in the HTML
     setInterval(function () {
       mi = (mi + 1) % messages.length;
       msg.textContent = messages[mi];
@@ -71,7 +78,7 @@
   // Submissions are delivered by FormSubmit (formsubmit.co).
   // NOTE: the first submission triggers a one-time activation email
   // to CONTACT_EMAIL — click the link in it to start receiving messages.
-  var CONTACT_EMAIL = "hello" + "@" + "moali.co.za"; // change to your studio inbox if needed
+  var CONTACT_EMAIL = "hello" + "@" + "moali.co.za"; // contact inbox — swap for a studio address any time
   var ENDPOINT = "https://formsubmit.co/ajax/" + CONTACT_EMAIL;
 
   var form = document.getElementById("contact-form");
