@@ -6,9 +6,10 @@ The temporary landing page for **Webworx Studio** while the full site is being b
 
 ## What's on it
 
+- Light theme with dark "terminal" accents (code editor hero, contact form)
 - Hero with animated "compiling" code editor & build progress bar
 - Services — websites, custom web apps, mobile apps, graphic design, social media
-- Client strip — Epping Firearms, Hawke, SPIK, Thermtec
+- Client strip — Epping Firearms Fishing & Outdoors, Hawke, SPIKA, ThermTec
 - Terminal-styled contact form (delivered via [FormSubmit](https://formsubmit.co))
 
 ## Stack
@@ -30,8 +31,9 @@ Submissions go through FormSubmit to the address set in `script.js`
 email** — click the link in it to start receiving messages. To change the
 inbox, edit `CONTACT_EMAIL` in [script.js](script.js).
 
-## Swapping in real client logos
+## Client logos
 
-The client strip currently uses styled wordmarks. To use real logos, drop
-SVG/PNG files into `assets/clients/` and replace the `<li>` entries in
-[index.html](index.html) with `<img>` tags.
+Logos live in `assets/clients/`, sourced from each brand's own site
+(Hawke's official black SVG, SPIKA's Odoo logo, ThermTec's white artwork
+recoloured via CSS `invert`, and the EFFO badge). Swap any of them by
+replacing the file and keeping the `<img>` tag in [index.html](index.html).
