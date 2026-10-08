@@ -249,52 +249,6 @@ h1 {
   transform: translateY(-2px);
 }
 
-/* build progress bar */
-.buildbar {
-  max-width: 430px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 16px 18px;
-  background: rgba(255, 255, 255, 0.72);
-  backdrop-filter: blur(6px);
-}
-.buildbar-head {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.75rem;
-  color: var(--muted);
-  margin-bottom: 10px;
-}
-.buildbar-track {
-  height: 7px;
-  border-radius: 99px;
-  background: rgba(14, 33, 28, 0.1);
-  overflow: hidden;
-}
-.buildbar-fill {
-  height: 100%;
-  width: 100%;
-  border-radius: 99px;
-  background: linear-gradient(90deg, #007a59, var(--brand));
-  position: relative;
-  transition: width 0.6s ease;
-}
-.buildbar-fill::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
-  transform: translateX(-100%);
-  animation: shimmer 1.8s infinite;
-}
-@keyframes shimmer { to { transform: translateX(100%); } }
-.buildbar-msg {
-  margin-top: 10px;
-  font-size: 0.75rem;
-  color: var(--green-text);
-  min-height: 1.2em;
-}
-
 /* ---------- code editor ---------- */
 .hero-editor { perspective: 1200px; }
 
@@ -431,38 +385,40 @@ h2 {
 /* ---------- clients ---------- */
 .clients {
   list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(145px, 100%), 1fr));
+  gap: 14px;
 }
 .client {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 84px;
-  padding: 16px 30px;
+  min-height: 100px;
+  padding: 16px 18px;
   border: 1px solid var(--line);
   border-radius: 12px;
   background: var(--surface);
   transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 .client:hover {
-  border-color: rgba(0, 169, 124, 0.5);
+  border-color: rgba(0, 168, 120, 0.5);
   transform: translateY(-3px);
   box-shadow: 0 14px 30px rgba(13, 31, 26, 0.1);
 }
 .client img {
   display: block;
-  height: 44px;
   width: auto;
-  max-width: 190px;
+  max-width: 100%;
   object-fit: contain;
   filter: grayscale(1);
   opacity: 0.75;
   transition: filter 0.2s ease, opacity 0.2s ease;
 }
 .client:hover img { filter: none; opacity: 1; }
-.client img.tall { height: 58px; }
+/* optical balance: square badges run taller, wide wordmarks shorter */
+.client img.sq   { height: 58px; }
+.client img.md   { height: 48px; }
+.client img.wide { height: 30px; }
 /* white-artwork logo, recoloured to ink for the light background */
 .client img.invert { filter: invert(0.88) grayscale(1); }
 .client:hover img.invert { filter: invert(0.88) grayscale(1); opacity: 1; }

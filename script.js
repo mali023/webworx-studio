@@ -21,51 +21,6 @@
     }, 350 + lines.length * 260 + 800);
   }
 
-  /* ---------- build status bar ---------- */
-  var fill = document.getElementById("build-fill");
-  var pct = document.getElementById("build-pct");
-  var msg = document.getElementById("build-msg");
-  var DONE_MSG = "✓ all systems operational";
-  var messages = [
-    "initializing repo…",
-    "installing dependencies…",
-    "compiling ui components…",
-    "optimizing assets…",
-    "polishing pixels…",
-    "deploying to production…"
-  ];
-
-  if (fill && pct && msg && !reducedMotion) {
-    var progress = 0;
-    var target = 100;
-    var mi = 0;
-    // this deferred script runs before first paint, so reset the CSS 100%
-    // fallback to 0 without a visible backwards jump
-    fill.style.transition = "none";
-    fill.style.width = "0%";
-    pct.textContent = "0%";
-    msg.textContent = messages[0];
-    void fill.offsetWidth;
-    fill.style.transition = "";
-    var tick = setInterval(function () {
-      progress += Math.max(1, Math.round((target - progress) / 8));
-      if (progress >= target) {
-        progress = target;
-        clearInterval(tick);
-        msg.textContent = DONE_MSG;
-      } else {
-        // walk through the build messages as the bar climbs
-        var step = Math.min(messages.length - 1, Math.floor((progress / target) * messages.length));
-        if (step !== mi) {
-          mi = step;
-          msg.textContent = messages[mi];
-        }
-      }
-      fill.style.width = progress + "%";
-      pct.textContent = progress + "%";
-    }, 110);
-  }
-
   /* ---------- footer year ---------- */
   var year = document.getElementById("year");
   if (year) year.textContent = String(new Date().getFullYear());

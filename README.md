@@ -2,7 +2,7 @@
 
 The website for **Webworx Studio** — a Melbourne digital studio building
 websites, custom web apps and mobile apps, with graphic design, social media
-management and a specialist ThermTec / SPIKA repair bench.
+management and a specialist thermal optics repair bench.
 
 > `// status: open_for_business`
 
@@ -10,9 +10,9 @@ Live at [webworxstudio.au](https://www.webworxstudio.au)
 
 ## Sections
 
-- Hero with the animated `webworx.config.js` editor and a status bar
+- Hero with the animated `webworx.config.js` editor
 - Services — websites, web apps, mobile apps, graphic design, social media, device repairs
-- The workshop — the ThermTec / SPIKA repair bench and its process pipeline
+- The workshop — the thermal optics repair bench and its process pipeline
 - Recent work — selected projects (Epping FFO, Hawke, MasjidBoard Live, Stellarmed, Posibolt, Buy Aprons)
 - Our apps — SpaceNames for macOS
 - Client strip, studio blurb and a terminal-styled contact form
