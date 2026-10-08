@@ -1,20 +1,30 @@
-# Webworx Studio — Coming Soon
+# Webworx Studio
 
-The temporary landing page for **Webworx Studio** while the full site is being built.
+The website for **Webworx Studio** — a Melbourne digital studio building
+websites, custom web apps and mobile apps, with graphic design, social media
+management and a specialist ThermTec / SPIKA repair bench.
 
-> `// status: coming_soon`
+> `// status: open_for_business`
 
-## What's on it
+Live at [webworxstudio.au](https://www.webworxstudio.au)
 
-- Light theme with dark "terminal" accents (code editor hero, contact form)
-- Hero with animated "compiling" code editor & build progress bar
-- Services — websites, custom web apps, mobile apps, graphic design, social media
-- Client strip — Epping Firearms Fishing & Outdoors, Hawke, SPIKA, ThermTec
-- Terminal-styled contact form (delivered via [FormSubmit](https://formsubmit.co))
+## Sections
+
+- Hero with the animated `webworx.config.js` editor and a status bar
+- Services — websites, web apps, mobile apps, graphic design, social media, device repairs
+- The workshop — the ThermTec / SPIKA repair bench and its process pipeline
+- Recent work — selected projects (Epping FFO, Hawke, MasjidBoard Live, Stellarmed, Posibolt, Buy Aprons)
+- Our apps — SpaceNames for macOS
+- Client strip, studio blurb and a terminal-styled contact form
+- `/aussie` — a personal invite page (noindex), unrelated to the studio content
 
 ## Stack
 
-Plain HTML / CSS / JS — no build step, no dependencies. Deployed on Vercel.
+Plain HTML / CSS / JS — no build step, no dependencies. Deployed on Vercel
+(git-linked: pushes to `main` go to production).
+
+Brand system: Ink `#10201F` · Petrol `#084C61` · Jade `#00A878` · Tint `#E3EDEE`,
+with Archivo (headings), Inter (body) and JetBrains Mono (code).
 
 ## Run locally
 
@@ -26,14 +36,12 @@ Then open http://localhost:4173
 
 ## Contact form
 
-Submissions go through FormSubmit to the address set in `script.js`
-(`CONTACT_EMAIL`). The **first submission triggers a one-time activation
-email** — click the link in it to start receiving messages. To change the
-inbox, edit `CONTACT_EMAIL` in [script.js](script.js).
+Submissions go through [FormSubmit](https://formsubmit.co) to the address set
+in `CONTACT_EMAIL` in [script.js](script.js). Changing the address requires a
+one-time activation email from FormSubmit.
 
 ## Client logos
 
 Logos live in `assets/clients/`, sourced from each brand's own site
-(Hawke's official black SVG, SPIKA's Odoo logo, ThermTec's white artwork
-recoloured via CSS `invert`, and the EFFO badge). Swap any of them by
+(ThermTec's white artwork is recoloured via CSS `invert`). Swap any of them by
 replacing the file and keeping the `<img>` tag in [index.html](index.html).

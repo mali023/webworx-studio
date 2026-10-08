@@ -1,4 +1,4 @@
-/* Webworx Studio — coming soon */
+/* Webworx Studio */
 (function () {
   "use strict";
 
@@ -21,28 +21,30 @@
     }, 350 + lines.length * 260 + 800);
   }
 
-  /* ---------- build progress bar ---------- */
+  /* ---------- build status bar ---------- */
   var fill = document.getElementById("build-fill");
   var pct = document.getElementById("build-pct");
   var msg = document.getElementById("build-msg");
+  var DONE_MSG = "✓ all systems operational";
   var messages = [
     "initializing repo…",
     "installing dependencies…",
     "compiling ui components…",
     "optimizing assets…",
-    "brewing coffee…",
     "polishing pixels…",
     "deploying to production…"
   ];
 
-  if (fill && pct && !reducedMotion) {
+  if (fill && pct && msg && !reducedMotion) {
     var progress = 0;
-    var target = 87;
-    // this deferred script runs before first paint, so reset the CSS 87%
+    var target = 100;
+    var mi = 0;
+    // this deferred script runs before first paint, so reset the CSS 100%
     // fallback to 0 without a visible backwards jump
     fill.style.transition = "none";
     fill.style.width = "0%";
     pct.textContent = "0%";
+    msg.textContent = messages[0];
     void fill.offsetWidth;
     fill.style.transition = "";
     var tick = setInterval(function () {
@@ -50,24 +52,18 @@
       if (progress >= target) {
         progress = target;
         clearInterval(tick);
-        // idle wobble between 87–96%
-        setInterval(function () {
-          progress = Math.min(96, progress + (Math.random() > 0.6 ? 1 : 0));
-          fill.style.width = progress + "%";
-          pct.textContent = progress + "%";
-        }, 2600);
+        msg.textContent = DONE_MSG;
+      } else {
+        // walk through the build messages as the bar climbs
+        var step = Math.min(messages.length - 1, Math.floor((progress / target) * messages.length));
+        if (step !== mi) {
+          mi = step;
+          msg.textContent = messages[mi];
+        }
       }
       fill.style.width = progress + "%";
       pct.textContent = progress + "%";
-    }, 90);
-  }
-
-  if (msg && !reducedMotion) {
-    var mi = 2; // index of the message already in the HTML
-    setInterval(function () {
-      mi = (mi + 1) % messages.length;
-      msg.textContent = messages[mi];
-    }, 2400);
+    }, 110);
   }
 
   /* ---------- footer year ---------- */

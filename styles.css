@@ -1,22 +1,25 @@
 /* ============================================================
-   Webworx Studio — Coming Soon
-   Palette drawn from the WX brand mark
+   Webworx Studio
+   Brand system: Ink #10201F · Petrol #084C61 · Jade #00A878 · Tint #E3EDEE
+   Type: Archivo (headings) · Inter (body) · JetBrains Mono (code)
    ============================================================ */
 
 :root {
   --bg: #f2f7f4;
+  --tint: #e3edee;
   --surface: #ffffff;
-  --line: rgba(14, 33, 28, 0.09);
-  --line-strong: rgba(14, 33, 28, 0.18);
-  --brand: #00a97c;
+  --line: rgba(16, 32, 31, 0.09);
+  --line-strong: rgba(16, 32, 31, 0.18);
+  --brand: #00a878;
   --green-text: #007a59;
-  --blue-text: #1d5f74;
-  --text: #0e211c;
+  --blue-text: #084c61;
+  --text: #10201f;
   --muted: #51665e;
   --red: #ff5f56;
   --yellow: #ffbd2e;
   --radius: 14px;
-  --font-sans: "Space Grotesk", "Avenir Next", "Segoe UI", sans-serif;
+  --font-sans: "Inter", "Avenir Next", "Segoe UI", sans-serif;
+  --font-head: "Archivo", "Inter", "Avenir Next", sans-serif;
   --font-mono: "JetBrains Mono", "SFMono-Regular", Menlo, Consolas, monospace;
 }
 
@@ -132,7 +135,8 @@ body {
 .logo-mark--sm .logo-chip { width: 11px; height: 11px; top: -6px; right: -6px; }
 
 .logo-text {
-  font-weight: 700;
+  font-family: var(--font-head);
+  font-weight: 800;
   letter-spacing: 0.14em;
   font-size: 0.95rem;
 }
@@ -183,15 +187,16 @@ body {
 @keyframes blink { 50% { opacity: 0; } }
 
 h1 {
+  font-family: var(--font-head);
   font-size: clamp(2.4rem, 4.4vw, 3.6rem);
   line-height: 1.08;
-  font-weight: 700;
+  font-weight: 800;
   letter-spacing: -0.02em;
   margin-bottom: 22px;
 }
 
 .grad {
-  background: linear-gradient(92deg, #007a59 0%, #009068 55%, #1d5f74 110%);
+  background: linear-gradient(92deg, #007a59 0%, #009068 55%, #084c61 115%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -268,7 +273,7 @@ h1 {
 }
 .buildbar-fill {
   height: 100%;
-  width: 87%;
+  width: 100%;
   border-radius: 99px;
   background: linear-gradient(90deg, #007a59, var(--brand));
   position: relative;
@@ -361,8 +366,9 @@ h1 {
 .section { padding: 72px 0; }
 
 h2 {
+  font-family: var(--font-head);
   font-size: clamp(1.7rem, 3.4vw, 2.5rem);
-  font-weight: 700;
+  font-weight: 800;
   letter-spacing: -0.02em;
   margin-bottom: 40px;
 }
@@ -607,4 +613,140 @@ a:focus-visible, button:focus-visible {
 @media (max-width: 640px) {
   .app-card { flex-direction: column; align-items: flex-start; }
   .nav-link { display: none; }
+}
+
+/* ---------- workshop band ---------- */
+.band {
+  background: var(--tint);
+  border-block: 1px solid var(--line);
+}
+.workshop-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: 56px;
+  align-items: center;
+}
+.workshop-copy .lead { margin-bottom: 0; }
+.ticklist {
+  list-style: none;
+  margin: 26px 0 30px;
+  display: grid;
+  gap: 12px;
+}
+.ticklist li {
+  position: relative;
+  padding-left: 30px;
+  color: var(--muted);
+}
+.ticklist li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--green-text);
+}
+.pipeline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  padding: 34px 26px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: 0 18px 40px rgba(13, 31, 26, 0.08);
+}
+.pipe-step {
+  padding: 10px 16px;
+  border: 1px solid var(--line-strong);
+  border-radius: 10px;
+  font-size: 0.85rem;
+  color: var(--text);
+  background: var(--bg);
+  white-space: nowrap;
+}
+.pipe-step--done {
+  background: var(--brand);
+  border-color: var(--brand);
+  color: #04110c;
+  font-weight: 700;
+}
+.pipe-arrow { color: var(--muted); }
+
+/* ---------- work ---------- */
+.work-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+  gap: 20px;
+}
+.work-card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  padding: 26px 24px;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.work-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(0, 168, 120, 0.5);
+  box-shadow: 0 18px 40px rgba(13, 31, 26, 0.12);
+}
+.work-path { font-size: 0.75rem; color: var(--green-text); margin-bottom: 12px; }
+.work-card h3 {
+  font-family: var(--font-head);
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin-bottom: 8px;
+}
+.work-card p { color: var(--muted); font-size: 0.95rem; flex-grow: 1; }
+.chips {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 16px;
+}
+.chips li {
+  font-size: 0.7rem;
+  color: var(--muted);
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  padding: 3px 10px;
+}
+.section-link { margin-top: 28px; font-size: 0.85rem; color: var(--muted); }
+.section-link a { color: var(--green-text); text-decoration: none; }
+.section-link a:hover { text-decoration: underline; }
+
+/* ---------- studio ---------- */
+.studio-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: 56px;
+  align-items: center;
+}
+.studio-grid .lead { margin-bottom: 0; }
+.studio-facts {
+  display: grid;
+  gap: 10px;
+  padding: 24px 26px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+/* ---------- footer links ---------- */
+.footer-links { display: flex; flex-wrap: wrap; gap: 22px; justify-content: center; }
+.footer-links a { color: var(--muted); text-decoration: none; font-size: 0.8rem; }
+.footer-links a:hover { color: var(--green-text); }
+
+@media (max-width: 960px) {
+  .workshop-grid, .studio-grid { grid-template-columns: minmax(0, 1fr); gap: 36px; }
 }
