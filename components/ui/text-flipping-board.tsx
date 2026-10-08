@@ -78,12 +78,12 @@ const FlapCell = React.memo(function FlapCell({
 
     if (normalized === " " && curRef.current === " ") return;
 
-    // far fewer scramble flips than upstream (25-40): with ~130 cells the
+    // fewer scramble flips than upstream (25-40): with ~130 cells the
     // re-renders are the real clock, so this is what sets the settle time
     const scrambleCount =
       normalized === " "
-        ? 2 + Math.floor(Math.random() * 2)
-        : 5 + Math.floor(Math.random() * 4);
+        ? 4 + Math.floor(Math.random() * 3)
+        : 10 + Math.floor(Math.random() * 5);
 
     const runStep = (i: number) => {
       const isLast = i === scrambleCount;
