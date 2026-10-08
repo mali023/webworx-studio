@@ -1,47 +1,36 @@
-# Webworx Studio
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-The website for **Webworx Studio** — a Melbourne digital studio building
-websites, custom web apps and mobile apps, with graphic design, social media
-management and a specialist thermal optics repair bench.
+## Getting Started
 
-> `// status: open_for_business`
-
-Live at [webworxstudio.au](https://www.webworxstudio.au)
-
-## Sections
-
-- Hero with the animated `webworx.config.js` editor
-- Services — websites, web apps, mobile apps, graphic design, social media, device repairs
-- The workshop — the thermal optics repair bench and its process pipeline
-- Recent work — selected projects (Epping FFO, Hawke, MasjidBoard Live, Stellarmed, Posibolt, Buy Aprons)
-- Our apps — SpaceNames for macOS
-- Client strip, studio blurb and a terminal-styled contact form
-- `/aussie` — a personal invite page (noindex), unrelated to the studio content
-
-## Stack
-
-Plain HTML / CSS / JS — no build step, no dependencies. Deployed on Vercel
-(git-linked: pushes to `main` go to production).
-
-Brand system: Ink `#10201F` · Petrol `#084C61` · Jade `#00A878` · Tint `#E3EDEE`,
-with Archivo (headings), Inter (body) and JetBrains Mono (code).
-
-## Run locally
+First, run the development server:
 
 ```bash
-python3 -m http.server 4173
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
-Then open http://localhost:4173
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## Contact form
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-Submissions go through [FormSubmit](https://formsubmit.co) to the address set
-in `CONTACT_EMAIL` in [script.js](script.js). Changing the address requires a
-one-time activation email from FormSubmit.
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Client logos
+## Learn More
 
-Logos live in `assets/clients/`, sourced from each brand's own site
-(ThermTec's white artwork is recoloured via CSS `invert`). Swap any of them by
-replacing the file and keeping the `<img>` tag in [index.html](index.html).
+To learn more about Next.js, take a look at the following resources:
+
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

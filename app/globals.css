@@ -1,0 +1,108 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ============================================================
+   Webworx Studio — brand tokens
+   Ink #10201F · Petrol #084C61 · Jade #00A878 · Tint #E3EDEE
+   ============================================================ */
+
+:root {
+  --bg: #f2f7f4;
+  --surface: #ffffff;
+  --fg: #10201f;
+  --mut: #51665e;
+  --line: rgba(16, 32, 31, 0.09);
+  --line-strong: rgba(16, 32, 31, 0.18);
+  --accent: #007a59;
+  --accent-2: #084c61;
+}
+
+.dark {
+  --bg: #0a1512;
+  --surface: #10231d;
+  --fg: #e8f2ee;
+  --mut: #9db5ac;
+  --line: rgba(232, 242, 238, 0.08);
+  --line-strong: rgba(232, 242, 238, 0.16);
+  --accent: #2bd79a;
+  --accent-2: #3fa3bd;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-fg: var(--fg);
+  --color-mut: var(--mut);
+  --color-line: var(--line);
+  --color-liner: var(--line-strong);
+  --color-accent: var(--accent);
+  --color-accent2: var(--accent-2);
+  --color-brand: #00a878;
+  --color-ink: #10201f;
+  --color-petrol: #084c61;
+  --color-tint: #e3edee;
+
+  --font-sans: var(--font-inter), "Avenir Next", "Segoe UI", sans-serif;
+  --font-head: var(--font-archivo), var(--font-inter), sans-serif;
+  --font-mono: var(--font-jetbrains), "SFMono-Regular", Menlo, monospace;
+
+  --animate-spotlight: spotlight 2s ease 0.75s 1 forwards;
+}
+
+@keyframes spotlight {
+  0% {
+    opacity: 0;
+    transform: translate(-72%, -62%) scale(0.5);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -40%) scale(1);
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+::selection {
+  background: #00a878;
+  color: #04110c;
+}
+
+/* faint blueprint grid, fading toward the bottom */
+.wx-grid {
+  background-image: linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: radial-gradient(ellipse 90% 70% at 50% 0%, black 40%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 0%, black 40%, transparent 100%);
+}
+
+.no-visible-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-visible-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
