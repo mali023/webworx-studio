@@ -48,13 +48,15 @@ export function Apps() {
           </div>
         }
       >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/assets/apps/spacenames-og.jpg"
-          alt="SpaceNames — names, colours and icons for your Mac's desktops"
-          className="mx-auto h-full w-full rounded-2xl object-cover object-center"
-          draggable={false}
-        />
+        <div className="flex h-full w-full items-center justify-center rounded-2xl bg-[#16112a]">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/assets/apps/spacenames-app.png"
+            alt="SpaceNames in Mission Control — five named desktops: Personal, Work, Design, Clients and Music"
+            className="h-full w-full object-contain"
+            draggable={false}
+          />
+        </div>
       </ContainerScroll>
     </section>
   );

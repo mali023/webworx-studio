@@ -11,9 +11,9 @@ export function Hero() {
   return (
     <BackgroundLines
       className="relative h-auto w-full overflow-hidden bg-transparent dark:bg-transparent"
-      svgOptions={{ duration: 12 }}
+      svgOptions={{ duration: 7 }}
     >
-      <div className="relative z-10 mx-auto grid w-full max-w-6xl items-center gap-14 px-6 pt-20 pb-16 md:min-h-[78vh] md:grid-cols-[1.05fr_0.95fr] md:pt-10">
+      <div className="relative z-10 mx-auto grid w-full max-w-6xl items-center gap-12 px-6 pt-16 pb-10 md:grid-cols-[1.05fr_0.95fr] md:pt-12">
         <div>
           <p className="mb-4 inline-flex items-center gap-2.5 rounded-full border border-line bg-surface/70 px-4 py-1.5 text-sm font-medium text-mut">
             <span className="relative flex h-2.5 w-2.5" aria-hidden>

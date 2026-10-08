@@ -52,7 +52,7 @@ function GlobeCanvas({ dark }: { dark: boolean }) {
         theta: 0.35,
         dark: dark ? 1 : 0,
         diffuse: 1.2,
-        mapSamples: 16000,
+        mapSamples: 34000,
         mapBrightness: 6,
         baseColor: dark ? [0.35, 0.65, 0.55] : [0.38, 0.54, 0.48],
         markerColor: [0.1, 1, 0.75],

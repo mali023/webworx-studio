@@ -6,7 +6,8 @@ import { cn } from "@/lib/utils";
 
 /* ============================================================
    The studio terminal: plays a short intro script, then goes
-   LIVE — visitors can type commands, and `play` starts Snake.
+   LIVE — visitors can type commands, and `play` opens Snake
+   in a near-fullscreen arcade modal.
    ============================================================ */
 
 type Line = { kind: "cmd" | "out" | "ok" | "hint" | "err"; text: string };
@@ -32,11 +33,11 @@ const DEMO: { cmd: string; out: Line[] }[] = [
 
 const HINT: Line = { kind: "hint", text: "this terminal is live — type help, or play 🎮" };
 
-/* ---------- snake ---------- */
+/* ---------- snake (wrap-around walls, arcade modal) ---------- */
 
-const COLS = 34;
-const ROWS = 16;
-const TICK_MS = 120;
+const COLS = 44;
+const ROWS = 24;
+const TICK_MS = 110;
 
 type Cell = [number, number];
 
@@ -50,16 +51,18 @@ type Game = {
 
 function spawnFood(snake: Cell[]): Cell {
   while (true) {
-    const c: Cell = [1 + Math.floor(Math.random() * (COLS - 2)), 1 + Math.floor(Math.random() * (ROWS - 2))];
+    const c: Cell = [Math.floor(Math.random() * COLS), Math.floor(Math.random() * ROWS)];
     if (!snake.some(([x, y]) => x === c[0] && y === c[1])) return c;
   }
 }
 
 function newGame(): Game {
+  const cy = Math.floor(ROWS / 2);
+  const cx = Math.floor(COLS / 2);
   const snake: Cell[] = [
-    [9, 8],
-    [8, 8],
-    [7, 8],
+    [cx, cy],
+    [cx - 1, cy],
+    [cx - 2, cy],
   ];
   return { snake, dir: [1, 0], nextDir: [1, 0], food: spawnFood(snake), score: 0 };
 }
@@ -135,6 +138,10 @@ export function WxTerminal({ className }: { className?: string }) {
   const [typed, setTyped] = useState(""); // demo typing in progress
   const [buffer, setBuffer] = useState(""); // live user input
   const [focused, setFocused] = useState(false);
+
+  const [gameState, setGameState] = useState<"count" | "run" | "dead">("count");
+  const [countdown, setCountdown] = useState(3);
+  const [best, setBest] = useState(0);
   const [, setTick] = useState(0); // game re-render
   // created on `play`, never during render — Math.random() upsets the prerender
   const gameRef = useRef<Game | null>(null);
@@ -223,6 +230,14 @@ export function WxTerminal({ className }: { className?: string }) {
 
   /* ---------- the shell ---------- */
 
+  const startGame = useCallback(() => {
+    gameRef.current = newGame();
+    setBest(readBest());
+    setCountdown(3);
+    setGameState("count");
+    setPhase("game");
+  }, []);
+
   const run = useCallback(
     (raw: string) => {
       const cmd = raw.trim();
@@ -248,8 +263,7 @@ export function WxTerminal({ className }: { className?: string }) {
         case "play":
         case "game":
         case "snake":
-          gameRef.current = newGame();
-          setPhase("game");
+          startGame();
           break;
         case "services":
         case "ls":
@@ -295,34 +309,66 @@ export function WxTerminal({ className }: { className?: string }) {
           print({ kind: "err", text: `command not found: ${word} — try help` });
       }
     },
-    [print, resolvedTheme, setTheme],
+    [print, resolvedTheme, setTheme, startGame],
   );
 
-  /* ---------- snake loop ---------- */
+  /* ---------- game: countdown ---------- */
 
   useEffect(() => {
-    if (phase !== "game") return;
+    if (phase !== "game" || gameState !== "count") return;
+    if (countdown <= 0) {
+      setGameState("run");
+      return;
+    }
+    const t = setTimeout(() => setCountdown((c) => c - 1), 700);
+    return () => clearTimeout(t);
+  }, [phase, gameState, countdown]);
+
+  /* ---------- game: main loop (walls wrap around) ---------- */
+
+  const endGame = useCallback(
+    (quit: boolean) => {
+      const g = gameRef.current;
+      const score = g?.score ?? 0;
+      const prevBest = readBest();
+      const isBest = score > prevBest;
+      if (isBest) writeBest(score);
+      setPhase("shell");
+      if (quit) {
+        print(
+          { kind: "out", text: `left the game — score: ${score}` },
+          { kind: "hint", text: "type play to go again" },
+        );
+      } else {
+        print(
+          { kind: "err", text: `game over — score: ${score}` },
+          isBest
+            ? { kind: "ok", text: "★ new personal best!" }
+            : { kind: "out", text: `personal best: ${Math.max(prevBest, score)}` },
+          { kind: "hint", text: "type play to go again" },
+        );
+      }
+      inputRef.current?.focus({ preventScroll: true });
+    },
+    [print],
+  );
+
+  useEffect(() => {
+    if (phase !== "game" || gameState !== "run") return;
 
     const step = () => {
       const g = gameRef.current;
       if (!g) return;
       g.dir = g.nextDir;
-      const head: Cell = [g.snake[0][0] + g.dir[0], g.snake[0][1] + g.dir[1]];
-      const hitWall = head[0] <= 0 || head[0] >= COLS - 1 || head[1] <= 0 || head[1] >= ROWS - 1;
+      // wrap-around: smashing into a wall just teleports you to the other side
+      const head: Cell = [
+        (g.snake[0][0] + g.dir[0] + COLS) % COLS,
+        (g.snake[0][1] + g.dir[1] + ROWS) % ROWS,
+      ];
       const hitSelf = g.snake.some(([x, y]) => x === head[0] && y === head[1]);
 
-      if (hitWall || hitSelf) {
-        const best = readBest();
-        const isBest = g.score > best;
-        if (isBest) writeBest(g.score);
-        setPhase("shell");
-        print(
-          { kind: "err", text: `game over — score: ${g.score}` },
-          isBest
-            ? { kind: "ok", text: "★ new personal best!" }
-            : { kind: "out", text: `personal best: ${Math.max(best, g.score)}` },
-          { kind: "hint", text: "type play to go again" },
-        );
+      if (hitSelf) {
+        setGameState("dead");
         return;
       }
 
@@ -338,7 +384,14 @@ export function WxTerminal({ className }: { className?: string }) {
 
     const interval = setInterval(step, TICK_MS);
     return () => clearInterval(interval);
-  }, [phase, print]);
+  }, [phase, gameState]);
+
+  /* dead: show GAME OVER briefly, then back to the shell */
+  useEffect(() => {
+    if (phase !== "game" || gameState !== "dead") return;
+    const t = setTimeout(() => endGame(false), 1300);
+    return () => clearTimeout(t);
+  }, [phase, gameState, endGame]);
 
   const steer = useCallback((dx: number, dy: number) => {
     const g = gameRef.current;
@@ -347,25 +400,36 @@ export function WxTerminal({ className }: { className?: string }) {
     g.nextDir = [dx, dy];
   }, []);
 
-  /* ---------- input handling ---------- */
-
-  const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (phase === "game") {
+  /* game keyboard: window-level while the modal is open */
+  useEffect(() => {
+    if (phase !== "game") return;
+    const onKey = (e: KeyboardEvent) => {
       const k = e.key.toLowerCase();
       if (["arrowup", "w"].includes(k)) steer(0, -1);
       else if (["arrowdown", "s"].includes(k)) steer(0, 1);
       else if (["arrowleft", "a"].includes(k)) steer(-1, 0);
       else if (["arrowright", "d"].includes(k)) steer(1, 0);
-      else if (["escape", "q"].includes(k)) {
-        setPhase("shell");
-        print(
-          { kind: "out", text: `left the game — score: ${gameRef.current?.score ?? 0}` },
-          { kind: "hint", text: "type play to go again" },
-        );
-      }
+      else if (["escape", "q"].includes(k)) endGame(true);
+      else return;
       e.preventDefault();
-      return;
-    }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [phase, steer, endGame]);
+
+  /* lock page scroll while the arcade is open */
+  useEffect(() => {
+    if (phase !== "game") return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [phase]);
+
+  /* ---------- input handling (shell) ---------- */
+
+  const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (phase === "shell" && e.key === "Enter") {
       run(buffer);
       setBuffer("");
@@ -395,99 +459,133 @@ export function WxTerminal({ className }: { className?: string }) {
   const g = gameRef.current;
 
   return (
-    <div
-      ref={containerRef}
-      className={cn("w-full font-mono text-xs", className)}
-      onClick={focusInput}
-      onTouchStart={onTouchStart}
-      onTouchEnd={onTouchEnd}
-    >
+    <>
       <div
-        className={cn(
-          "overflow-hidden rounded-lg border bg-neutral-900 shadow-2xl transition-colors",
-          focused ? "border-emerald-700/60" : "border-neutral-800",
-        )}
+        ref={containerRef}
+        className={cn("w-full font-mono text-xs", className)}
+        onClick={focusInput}
       >
-        {/* title bar */}
-        <div className="flex items-center gap-2 bg-neutral-800 px-4 py-3">
-          <div className="flex items-center gap-1.5">
-            <div className="h-3 w-3 rounded-full bg-red-500" />
-            <div className="h-3 w-3 rounded-full bg-yellow-500" />
-            <div className="h-3 w-3 rounded-full bg-green-500" />
-          </div>
-          <div className="flex-1 text-center">
-            <span className="truncate text-xs text-neutral-400">
-              {phase === "game" ? "snake — webworx arcade" : "webworx — bash"}
-            </span>
-          </div>
-          <div className="w-[52px]" />
-        </div>
-
-        {/* content */}
         <div
-          ref={contentRef}
           className={cn(
-            "no-visible-scrollbar relative cursor-text overflow-y-auto p-4 transition-[height] duration-300",
-            phase === "game" ? "h-[27rem]" : "h-80",
+            "overflow-hidden rounded-lg border bg-neutral-900 shadow-2xl transition-colors",
+            focused ? "border-emerald-700/60" : "border-neutral-800",
           )}
-          aria-live="polite"
         >
-          {phase !== "game" && (
-            <>
-              {lines.map((line, i) => (
-                <div key={i} className="whitespace-pre-wrap leading-relaxed">
-                  {line.kind === "cmd" ? (
-                    <span>
-                      <Prompt />
-                      <CmdText text={line.text} />
-                    </span>
-                  ) : (
-                    <span className={LINE_CLS[line.kind]}>{line.text}</span>
+          {/* title bar */}
+          <div className="flex items-center gap-2 bg-neutral-800 px-4 py-3">
+            <div className="flex items-center gap-1.5">
+              <div className="h-3 w-3 rounded-full bg-red-500" />
+              <div className="h-3 w-3 rounded-full bg-yellow-500" />
+              <div className="h-3 w-3 rounded-full bg-green-500" />
+            </div>
+            <div className="flex-1 text-center">
+              <span className="truncate text-xs text-neutral-400">webworx — bash</span>
+            </div>
+            <div className="w-[52px]" />
+          </div>
+
+          {/* content */}
+          <div
+            ref={contentRef}
+            className="no-visible-scrollbar relative h-80 cursor-text overflow-y-auto p-4"
+            aria-live="polite"
+          >
+            {lines.map((line, i) => (
+              <div key={i} className="whitespace-pre-wrap leading-relaxed">
+                {line.kind === "cmd" ? (
+                  <span>
+                    <Prompt />
+                    <CmdText text={line.text} />
+                  </span>
+                ) : (
+                  <span className={LINE_CLS[line.kind]}>{line.text}</span>
+                )}
+              </div>
+            ))}
+
+            {/* demo typing line */}
+            {phase === "demo" && (
+              <div className="whitespace-pre-wrap leading-relaxed">
+                <Prompt />
+                <CmdText text={typed} />
+                <span className="ml-0.5 inline-block h-4 w-2 animate-pulse bg-neutral-300 align-middle" />
+              </div>
+            )}
+
+            {/* live prompt */}
+            {(phase === "shell" || phase === "game") && (
+              <div className="whitespace-pre-wrap leading-relaxed">
+                <Prompt />
+                <CmdText text={phase === "game" ? "play" : buffer} />
+                <span
+                  className={cn(
+                    "ml-0.5 inline-block h-4 w-2 align-middle",
+                    focused && phase === "shell" ? "animate-pulse bg-emerald-400" : "bg-neutral-600",
                   )}
-                </div>
-              ))}
+                />
+              </div>
+            )}
 
-              {/* demo typing line */}
-              {phase === "demo" && (
-                <div className="whitespace-pre-wrap leading-relaxed">
-                  <Prompt />
-                  <CmdText text={typed} />
-                  <span className="ml-0.5 inline-block h-4 w-2 animate-pulse bg-neutral-300 align-middle" />
-                </div>
-              )}
+            {/* real input, visually hidden but focusable */}
+            <input
+              ref={inputRef}
+              type="text"
+              value={buffer}
+              onChange={(e) => phase === "shell" && setBuffer(e.target.value)}
+              onKeyDown={onKeyDown}
+              onFocus={() => setFocused(true)}
+              onBlur={() => setFocused(false)}
+              className="absolute h-px w-px opacity-0"
+              autoCapitalize="none"
+              autoComplete="off"
+              autoCorrect="off"
+              spellCheck={false}
+              aria-label="Terminal input — type help for commands, or play for a game"
+            />
+          </div>
+        </div>
+      </div>
 
-              {/* live prompt */}
-              {phase === "shell" && (
-                <div className="whitespace-pre-wrap leading-relaxed">
-                  <Prompt />
-                  <CmdText text={buffer} />
-                  <span
-                    className={cn(
-                      "ml-0.5 inline-block h-4 w-2 align-middle",
-                      focused ? "animate-pulse bg-emerald-400" : "bg-neutral-600",
-                    )}
-                  />
-                </div>
-              )}
-            </>
-          )}
+      {/* ---------- arcade modal ---------- */}
+      {phase === "game" && g && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Snake — the Webworx arcade"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/85 p-3 backdrop-blur-sm sm:p-6"
+          onTouchStart={onTouchStart}
+          onTouchEnd={onTouchEnd}
+        >
+          <div className="flex max-h-full w-full max-w-4xl flex-col overflow-hidden rounded-xl border border-neutral-800 bg-neutral-900 font-mono shadow-2xl">
+            {/* title bar */}
+            <div className="flex items-center gap-2 bg-neutral-800 px-4 py-3">
+              <div className="flex items-center gap-1.5">
+                <button
+                  aria-label="Quit game"
+                  onClick={() => endGame(true)}
+                  className="h-3 w-3 cursor-pointer rounded-full bg-red-500 hover:bg-red-400"
+                />
+                <div className="h-3 w-3 rounded-full bg-yellow-500" />
+                <div className="h-3 w-3 rounded-full bg-green-500" />
+              </div>
+              <div className="flex-1 text-center">
+                <span className="text-xs text-neutral-400">snake — webworx arcade</span>
+              </div>
+              <div className="w-[52px]" />
+            </div>
 
-          {phase === "game" && g && (
-            <div className="flex h-full flex-col items-center justify-center gap-3">
-              <div className="text-sm leading-[1.12] tracking-[0.08em]">
+            {/* board */}
+            <div className="relative flex flex-1 items-center justify-center overflow-hidden p-4 sm:p-6">
+              <div
+                className="rounded-lg border border-emerald-900/50 bg-[#0b1210] p-2 text-[11px] leading-[1.1] tracking-[0.06em] sm:p-3 sm:text-sm md:text-base"
+                aria-hidden
+              >
                 {Array.from({ length: ROWS }, (_, y) => (
                   <div key={y} className="whitespace-pre">
                     {Array.from({ length: COLS }, (_, x) => {
-                      const border = x === 0 || x === COLS - 1 || y === 0 || y === ROWS - 1;
                       const isHead = g.snake[0][0] === x && g.snake[0][1] === y;
                       const isBody = !isHead && g.snake.some(([sx, sy]) => sx === x && sy === y);
                       const isFood = g.food[0] === x && g.food[1] === y;
-                      if (border)
-                        return (
-                          <span key={x} className="text-neutral-700">
-                            {y === 0 || y === ROWS - 1 ? "─" : "│"}
-                          </span>
-                        );
                       if (isHead)
                         return (
                           <span key={x} className="text-emerald-300">
@@ -511,31 +609,49 @@ export function WxTerminal({ className }: { className?: string }) {
                   </div>
                 ))}
               </div>
-              <p className="text-neutral-400">
-                score: <span className="text-emerald-400">{g.score}</span>
-                <span className="text-neutral-600"> · arrows / wasd / swipe · q to quit</span>
-              </p>
-            </div>
-          )}
 
-          {/* real input, visually hidden but focusable */}
-          <input
-            ref={inputRef}
-            type="text"
-            value={buffer}
-            onChange={(e) => phase === "shell" && setBuffer(e.target.value)}
-            onKeyDown={onKeyDown}
-            onFocus={() => setFocused(true)}
-            onBlur={() => setFocused(false)}
-            className="absolute h-px w-px opacity-0"
-            autoCapitalize="none"
-            autoComplete="off"
-            autoCorrect="off"
-            spellCheck={false}
-            aria-label="Terminal input — type help for commands, or play for a game"
-          />
+              {/* countdown / game over overlays */}
+              {gameState === "count" && (
+                <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-black/60">
+                  <p
+                    key={countdown}
+                    className="animate-ping font-head text-7xl font-extrabold text-emerald-300 sm:text-8xl"
+                  >
+                    {countdown > 0 ? countdown : "GO"}
+                  </p>
+                  <p className="text-xs text-neutral-400 sm:text-sm">
+                    arrows / wasd / swipe · walls wrap around · q to quit
+                  </p>
+                </div>
+              )}
+              {gameState === "dead" && (
+                <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-black/70">
+                  <p className="font-head text-5xl font-extrabold text-red-400 sm:text-6xl">GAME OVER</p>
+                  <p className="text-sm text-neutral-300">
+                    score: <span className="text-emerald-400">{g.score}</span>
+                    {g.score > best && <span className="ml-2 text-amber-300">★ new best!</span>}
+                  </p>
+                </div>
+              )}
+            </div>
+
+            {/* status bar */}
+            <div className="flex items-center justify-between border-t border-neutral-800 bg-neutral-900 px-4 py-2.5 text-xs text-neutral-400 sm:px-6">
+              <span>
+                score: <span className="text-emerald-400">{g.score}</span>
+                <span className="ml-4 hidden sm:inline">best: {Math.max(best, g.score)}</span>
+              </span>
+              <span className="hidden text-neutral-500 sm:inline">walls wrap · eat the dots</span>
+              <button
+                onClick={() => endGame(true)}
+                className="cursor-pointer text-neutral-400 underline-offset-2 hover:text-emerald-400 hover:underline"
+              >
+                quit (q)
+              </button>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 }

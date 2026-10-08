@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from "motion/react";
-import { Button as MovingBorderButton } from "@/components/ui/moving-border";
 import { SectionHeading } from "./section-heading";
 
 const steps = ["intake", "diagnose", "repair", "test", "return ✓"];
@@ -26,7 +25,7 @@ export function Workshop() {
               of a well-renowned brand — whether your unit comes in through a dealer or
               straight from you.
             </p>
-            <ul className="my-7 grid gap-3">
+            <ul className="mt-7 grid gap-3">
               {points.map((p) => (
                 <li key={p} className="relative pl-7 text-mut">
                   <span className="absolute left-0 top-0 font-mono font-bold text-accent">✓</span>
@@ -34,17 +33,6 @@ export function Workshop() {
                 </li>
               ))}
             </ul>
-            <MovingBorderButton
-              as="a"
-              href="#contact"
-              borderRadius="0.75rem"
-              containerClassName="inline-block h-auto w-auto p-[1.5px]"
-              borderClassName="h-14 w-14 bg-[radial-gradient(#00a878_40%,transparent_60%)]"
-              className="border-line bg-surface px-6 py-3.5 text-sm font-semibold text-fg"
-              duration={3500}
-            >
-              Book a repair →
-            </MovingBorderButton>
           </div>
 
           <div

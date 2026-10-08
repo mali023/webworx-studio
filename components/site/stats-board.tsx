@@ -56,7 +56,7 @@ export function StatsBoard() {
 
   useEffect(() => {
     if (!started) return;
-    const t = setInterval(() => setScreen((s) => (s + 1) % SCREENS.length), 9000);
+    const t = setInterval(() => setScreen((s) => (s + 1) % SCREENS.length), 6500);
     return () => clearInterval(t);
   }, [started]);
 
@@ -74,7 +74,7 @@ export function StatsBoard() {
           <div ref={ref}>
             <TextFlippingBoard
               rows={started ? SCREENS[screen] : SCREENS[0].map(() => "")}
-              duration={2}
+              duration={1.1}
               className="mx-auto w-full max-w-2xl"
             />
           </div>
