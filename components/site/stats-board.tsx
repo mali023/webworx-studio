@@ -74,7 +74,7 @@ export function StatsBoard() {
           <div ref={ref}>
             <TextFlippingBoard
               rows={started ? SCREENS[screen] : SCREENS[0].map(() => "")}
-              duration={1.1}
+              duration={0.15}
               className="mx-auto w-full max-w-2xl"
             />
           </div>

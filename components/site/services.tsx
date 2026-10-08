@@ -112,7 +112,7 @@ function Feature({
 
 export function Services() {
   return (
-    <section id="services" className="mx-auto w-full max-w-6xl scroll-mt-24 px-6 py-20">
+    <section id="services" className="mx-auto w-full max-w-6xl scroll-mt-24 px-6 pt-6 pb-20 md:pt-2">
       <SectionHeading eyebrow="What we do" title="Full-stack, full-service." />
       <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
         {features.map((feature, index) => (

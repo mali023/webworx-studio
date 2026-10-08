@@ -48,15 +48,13 @@ export function Apps() {
           </div>
         }
       >
-        <div className="flex h-full w-full items-center justify-center rounded-2xl bg-[#16112a]">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/assets/apps/spacenames-app.png"
-            alt="SpaceNames in Mission Control — five named desktops: Personal, Work, Design, Clients and Music"
-            className="h-full w-full object-contain"
-            draggable={false}
-          />
-        </div>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/assets/apps/spacenames-site.png"
+          alt="SpaceNames on a Mac — named desktops in Mission Control: Personal, Work, Design, Clients and Music"
+          className="h-full w-full rounded-2xl object-cover object-top"
+          draggable={false}
+        />
       </ContainerScroll>
     </section>
   );

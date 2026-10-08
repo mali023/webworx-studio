@@ -5,7 +5,7 @@ import { BackgroundLines } from "@/components/ui/background-lines";
 import { MagneticButton } from "@/components/ui/magnetic-button";
 import { WxTerminal } from "./wx-terminal";
 
-const verbs = ["design", "build", "ship", "repair", "caffeinate"];
+const verbs = ["design", "build", "ship", "launch", "caffeinate"];
 
 export function Hero() {
   return (
@@ -13,7 +13,7 @@ export function Hero() {
       className="relative h-auto w-full overflow-hidden bg-transparent dark:bg-transparent"
       svgOptions={{ duration: 7 }}
     >
-      <div className="relative z-10 mx-auto grid w-full max-w-6xl items-center gap-12 px-6 pt-16 pb-10 md:grid-cols-[1.05fr_0.95fr] md:pt-12">
+      <div className="relative z-10 mx-auto grid w-full max-w-6xl items-center gap-12 px-6 pt-16 pb-10 md:min-h-[calc(100svh-76px)] md:grid-cols-[1.05fr_0.95fr] md:py-6">
         <div>
           <p className="mb-4 inline-flex items-center gap-2.5 rounded-full border border-line bg-surface/70 px-4 py-1.5 text-sm font-medium text-mut">
             <span className="relative flex h-2.5 w-2.5" aria-hidden>
