@@ -17,7 +17,9 @@ const services = [
 ];
 
 const inputClass =
-  "w-full rounded-lg border border-white/15 bg-[#0a1512]/70 px-3.5 py-3 font-mono text-sm text-[#e8f2ee] placeholder:text-[#9db5ac]/60 transition focus:border-brand focus:shadow-[0_0_0_3px_rgba(0,168,120,0.18)] focus:outline-none";
+  "w-full rounded-lg border border-liner bg-bg px-3.5 py-3 text-sm text-fg placeholder:text-mut/60 transition focus:border-brand focus:shadow-[0_0_0_3px_rgba(0,168,120,0.18)] focus:outline-none";
+
+const labelClass = "grid gap-2 text-sm font-medium text-fg";
 
 type Status = { kind: "idle" | "sending" | "ok" | "err"; mailto?: string };
 
@@ -75,49 +77,38 @@ export function Contact() {
     <section id="contact" className="mx-auto w-full max-w-6xl scroll-mt-24 px-6 py-20">
       <div className="grid items-start gap-12 md:grid-cols-[1fr_1.1fr]">
         <div>
-          <SectionHeading eyebrow="get_in_touch" title="Have a project in mind?" />
+          <SectionHeading eyebrow="Get in touch" title="Have a project in mind?" />
           <p className="-mt-4 max-w-[48ch] leading-relaxed text-mut">
             Tell us what you&apos;re building — or what needs fixing — and we&apos;ll get
             back to you with straight answers, not a sales pitch.
           </p>
-          <p className="mt-6 font-mono text-sm text-mut">
-            <span className="text-accent">$</span> response_time:{" "}
-            <span className="text-fg">usually &lt;24h</span>
+          <p className="mt-6 text-sm text-mut">
+            We usually reply within{" "}
+            <span className="font-semibold text-fg">24 hours</span>.
           </p>
         </div>
 
-        {/* the terminal form stays dark in both themes, deliberately */}
         <form
           onSubmit={onSubmit}
           noValidate
-          className="overflow-hidden rounded-2xl border border-white/15 bg-gradient-to-b from-[#132a23] to-[#0e1f1a] shadow-[0_24px_56px_rgba(13,31,26,0.32)]"
+          className="rounded-2xl border border-line bg-surface p-7 shadow-[0_24px_56px_rgba(13,31,26,0.12)] sm:p-8"
         >
-          <div className="flex items-center gap-1.5 border-b border-white/10 bg-[#0a1512]/70 px-4 py-3 font-mono text-xs text-[#9db5ac]">
-            <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f56]" />
-            <span className="h-2.5 w-2.5 rounded-full bg-[#ffbd2e]" />
-            <span className="h-2.5 w-2.5 rounded-full bg-[#27c93f]" />
-            <span className="ml-2.5">new_message.sh</span>
-          </div>
-          <div className="grid gap-4 p-6">
-            <label className="grid gap-2 font-mono text-xs text-[#9db5ac]" htmlFor="f-name">
+          <div className="grid gap-5">
+            <label className={labelClass} htmlFor="f-name">
               <span>
-                <span className="text-[#2bd79a]">$</span> your_name{" "}
-                <span className="text-[#2bd79a]" aria-hidden>*</span>
+                Your name <span className="text-accent" aria-hidden>*</span>
               </span>
               <input id="f-name" name="name" type="text" autoComplete="name" required placeholder="Jane Doe" className={inputClass} />
             </label>
-            <label className="grid gap-2 font-mono text-xs text-[#9db5ac]" htmlFor="f-email">
+            <label className={labelClass} htmlFor="f-email">
               <span>
-                <span className="text-[#2bd79a]">$</span> your_email{" "}
-                <span className="text-[#2bd79a]" aria-hidden>*</span>
+                Email <span className="text-accent" aria-hidden>*</span>
               </span>
               <input id="f-email" name="email" type="email" autoComplete="email" required placeholder="jane@company.com" className={inputClass} />
             </label>
-            <label className="grid gap-2 font-mono text-xs text-[#9db5ac]" htmlFor="f-service">
-              <span>
-                <span className="text-[#2bd79a]">$</span> service
-              </span>
-              <select id="f-service" name="service" className={inputClass + " appearance-none"}>
+            <label className={labelClass} htmlFor="f-service">
+              <span>What do you need?</span>
+              <select id="f-service" name="service" className={inputClass}>
                 {services.map((s) => (
                   <option key={s} value={s}>
                     {s}
@@ -125,10 +116,9 @@ export function Contact() {
                 ))}
               </select>
             </label>
-            <label className="grid gap-2 font-mono text-xs text-[#9db5ac]" htmlFor="f-message">
+            <label className={labelClass} htmlFor="f-message">
               <span>
-                <span className="text-[#2bd79a]">$</span> your_message{" "}
-                <span className="text-[#2bd79a]" aria-hidden>*</span>
+                Your message <span className="text-accent" aria-hidden>*</span>
               </span>
               <textarea id="f-message" name="message" rows={4} required placeholder="Tell us about your project…" className={inputClass + " min-h-[110px] resize-y"} />
             </label>
@@ -136,18 +126,20 @@ export function Contact() {
             <button
               type="submit"
               disabled={status.kind === "sending"}
-              className="w-full cursor-pointer rounded-xl bg-brand px-6 py-3.5 font-mono text-sm font-semibold text-[#04110c] shadow-[0_8px_24px_rgba(0,168,120,0.3)] transition hover:bg-[#00b487] disabled:opacity-70"
+              className="w-full cursor-pointer rounded-xl bg-brand px-6 py-3.5 text-sm font-semibold text-[#04110c] shadow-[0_8px_24px_rgba(0,168,120,0.3)] transition hover:bg-[#00b487] disabled:opacity-70"
             >
-              {status.kind === "sending" ? "> sending…" : "> send_message()"}
+              {status.kind === "sending" ? "Sending…" : "Send message"}
             </button>
-            <p role="status" aria-live="polite" className="min-h-[1.2em] font-mono text-xs">
+            <p role="status" aria-live="polite" className="min-h-[1.2em] text-sm">
               {status.kind === "ok" && (
-                <span className="text-[#2bd79a]">✓ message_sent — we&apos;ll get back to you soon.</span>
+                <span className="font-medium text-accent">
+                  ✓ Message sent — we&apos;ll get back to you soon.
+                </span>
               )}
               {status.kind === "err" && (
-                <span className="text-[#ff5f56]">
-                  ✗ send_failed —{" "}
-                  <a href={status.mailto} className="text-[#2bd79a] underline">
+                <span className="text-[#e5484d]">
+                  Something went wrong —{" "}
+                  <a href={status.mailto} className="font-medium text-accent underline">
                     email us directly instead
                   </a>
                   .

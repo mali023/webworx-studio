@@ -58,7 +58,7 @@ const clients = [
 export function Clients() {
   return (
     <section id="clients" className="mx-auto w-full max-w-6xl scroll-mt-24 px-6 py-20">
-      <SectionHeading eyebrow="working_with" title="Brands we work with." />
+      <SectionHeading eyebrow="Who we work with" title="Brands we work with." />
       <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-3 lg:grid-cols-7">
         {clients.map((c) => (
           <div

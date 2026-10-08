@@ -95,7 +95,7 @@ const projects: Project[] = [
 export function Work() {
   return (
     <section id="work" className="mx-auto w-full max-w-6xl scroll-mt-24 px-6 py-20">
-      <SectionHeading eyebrow="recent_work" title="Work that's out there." />
+      <SectionHeading eyebrow="Recent work" title="Work that's out there." />
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {projects.map((p) => (
           <CardContainer
@@ -104,9 +104,6 @@ export function Work() {
             className="h-full w-full"
           >
             <CardBody className="flex h-full w-full flex-col rounded-2xl border border-line bg-surface p-6 transition-colors group-hover/card:border-brand/50 hover:border-brand/50">
-              <CardItem as="p" translateZ={30} className="mb-3 font-mono text-xs text-accent">
-                {p.path}
-              </CardItem>
               <CardItem
                 as="h3"
                 translateZ={50}
@@ -121,7 +118,7 @@ export function Work() {
                 {p.chips.map((c) => (
                   <li
                     key={c}
-                    className="rounded-full border border-liner px-2.5 py-0.5 font-mono text-[0.7rem] text-mut"
+                    className="rounded-full border border-liner px-2.5 py-0.5 text-[0.72rem] font-medium text-mut"
                   >
                     {c}
                   </li>

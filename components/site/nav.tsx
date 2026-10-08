@@ -2,10 +2,10 @@ import { LogoLockup } from "./logo";
 import { LightsToggle } from "./lights-toggle";
 
 const links = [
-  { href: "#services", label: "services" },
-  { href: "#workshop", label: "repairs" },
-  { href: "#work", label: "work" },
-  { href: "#apps", label: "apps" },
+  { href: "#services", label: "Services" },
+  { href: "#workshop", label: "Repairs" },
+  { href: "#work", label: "Work" },
+  { href: "#apps", label: "Apps" },
 ];
 
 export function Nav() {
@@ -18,7 +18,7 @@ export function Nav() {
             <a
               key={l.href}
               href={l.href}
-              className="hidden font-mono text-sm text-mut transition-colors hover:text-accent md:inline"
+              className="hidden text-sm font-medium text-mut transition-colors hover:text-accent md:inline"
             >
               {l.label}
             </a>
@@ -26,9 +26,9 @@ export function Nav() {
           <LightsToggle />
           <a
             href="#contact"
-            className="hidden font-mono text-sm text-accent underline-offset-4 hover:underline sm:inline"
+            className="hidden rounded-lg bg-brand px-4 py-2 text-sm font-semibold text-[#04110c] transition hover:bg-[#00b487] sm:inline"
           >
-            contact --now
+            Contact
           </a>
         </nav>
       </div>

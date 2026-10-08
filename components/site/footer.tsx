@@ -2,11 +2,11 @@ import { WxMark } from "./logo";
 import { Year } from "./year";
 
 const links = [
-  { href: "#services", label: "services" },
-  { href: "#workshop", label: "repairs" },
-  { href: "#work", label: "work" },
-  { href: "#apps", label: "apps" },
-  { href: "#contact", label: "contact" },
+  { href: "#services", label: "Services" },
+  { href: "#workshop", label: "Repairs" },
+  { href: "#work", label: "Work" },
+  { href: "#apps", label: "Apps" },
+  { href: "#contact", label: "Contact" },
 ];
 
 export function Footer() {
@@ -19,13 +19,13 @@ export function Footer() {
             <a
               key={l.href}
               href={l.href}
-              className="font-mono text-xs text-mut transition-colors hover:text-accent"
+              className="text-xs font-medium text-mut transition-colors hover:text-accent"
             >
               {l.label}
             </a>
           ))}
         </nav>
-        <p className="font-mono text-xs text-mut">
+        <p className="text-xs text-mut">
           © <Year /> Webworx Studio — websites · web apps · mobile apps · design · social ·
           repairs
         </p>

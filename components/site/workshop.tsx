@@ -17,7 +17,7 @@ export function Workshop() {
   return (
     <section id="workshop" className="scroll-mt-24 border-y border-line bg-tint dark:bg-surface/40">
       <div className="mx-auto w-full max-w-6xl px-6 py-20">
-        <SectionHeading eyebrow="the_workshop" title="The repair bench." />
+        <SectionHeading eyebrow="The workshop" title="The repair bench." />
         <div className="grid items-center gap-12 md:grid-cols-[1.1fr_0.9fr]">
           <div>
             <p className="max-w-[58ch] leading-relaxed text-mut">
@@ -40,10 +40,10 @@ export function Workshop() {
               borderRadius="0.75rem"
               containerClassName="inline-block h-auto w-auto p-[1.5px]"
               borderClassName="h-14 w-14 bg-[radial-gradient(#00a878_40%,transparent_60%)]"
-              className="border-line bg-surface px-6 py-3.5 font-mono text-sm font-semibold text-fg"
+              className="border-line bg-surface px-6 py-3.5 text-sm font-semibold text-fg"
               duration={3500}
             >
-              &gt;&nbsp;book_a_repair
+              Book a repair →
             </MovingBorderButton>
           </div>
 
@@ -58,7 +58,7 @@ export function Workshop() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-60px" }}
                 transition={{ delay: i * 0.18, duration: 0.4 }}
-                className="flex items-center gap-2.5 font-mono text-sm"
+                className="flex items-center gap-2.5 text-sm font-medium"
               >
                 <span
                   className={
