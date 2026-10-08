@@ -6,112 +6,119 @@ import {
   IconSpeakerphone,
   IconTool,
   IconSparkles,
+  IconMessageCircle,
 } from "@tabler/icons-react";
-import { BentoGrid, BentoGridItem } from "@/components/ui/bento-grid";
+import { cn } from "@/lib/utils";
 import { SectionHeading } from "./section-heading";
 
-function CellHeader({ tag, from, to }: { tag: string; from: string; to: string }) {
-  return (
-    <div
-      className="flex min-h-[6rem] w-full flex-1 items-center justify-center rounded-lg border border-line"
-      style={{ background: `linear-gradient(135deg, ${from}, ${to})` }}
-    >
-      <span className="font-head text-lg font-bold tracking-tight text-white/90 md:text-xl">{tag}</span>
-    </div>
-  );
-}
-
-const iconClass = "h-5 w-5 text-accent";
-
-const items = [
+const features = [
   {
     title: "Websites",
     description:
       "Fast, responsive, pixel-perfect websites that turn visitors into customers — from brochure sites to high-volume online stores.",
-    header: <CellHeader tag="Websites" from="#084c61" to="#00a878" />,
-    icon: <IconWorld className={iconClass} />,
-    className: "md:col-span-2",
+    icon: <IconWorld />,
   },
   {
     title: "Custom Web Apps",
     description:
       "Tailor-made web applications built around your workflow — back-office tools, booking systems, dashboards and POS integrations.",
-    header: <CellHeader tag="Web apps" from="#10201f" to="#084c61" />,
-    icon: <IconLayoutGrid className={iconClass} />,
-    className: "md:col-span-1",
+    icon: <IconLayoutGrid />,
   },
   {
     title: "Mobile Apps",
     description: "Smooth, native-feel apps for iOS, Android and macOS, from first idea to app store.",
-    header: <CellHeader tag="Mobile apps" from="#00a878" to="#10201f" />,
-    icon: <IconDeviceMobile className={iconClass} />,
-    className: "md:col-span-1",
+    icon: <IconDeviceMobile />,
   },
   {
     title: "Graphic Design",
     description:
       "Logos, brand identities and visuals that make your business unmistakable — on screen and in print.",
-    header: <CellHeader tag="Graphic design" from="#2bd79a" to="#084c61" />,
-    icon: <IconPalette className={iconClass} />,
-    className: "md:col-span-1",
+    icon: <IconPalette />,
   },
   {
     title: "Social Media",
     description:
       "Full channel management — content, campaigns and scheduling, run end-to-end the way we run it for Hawke.",
-    header: <CellHeader tag="Social media" from="#084c61" to="#2bd79a" />,
-    icon: <IconSpeakerphone className={iconClass} />,
-    className: "md:col-span-1",
+    icon: <IconSpeakerphone />,
   },
   {
     title: "Device Repairs",
     description: (
       <>
         A specialist service bench repairing thermal optics on the brand&apos;s own behalf.{" "}
-        <a href="#workshop" className="text-accent hover:underline">
-          see the workshop →
+        <a href="#workshop" className="font-medium text-accent hover:underline">
+          See the workshop →
         </a>
       </>
     ),
-    header: <CellHeader tag="Device repairs" from="#10201f" to="#00a878" />,
-    icon: <IconTool className={iconClass} />,
-    className: "md:col-span-2",
+    icon: <IconTool />,
   },
   {
     title: "Your Project",
     description: (
       <>
         Got something different in mind? We like different.{" "}
-        <a href="#contact" className="text-accent hover:underline">
-          let&apos;s talk →
+        <a href="#contact" className="font-medium text-accent hover:underline">
+          Let&apos;s talk →
         </a>
       </>
     ),
-    header: <CellHeader tag="Your project" from="#51665e" to="#10201f" />,
-    icon: <IconSparkles className={iconClass} />,
-    className: "md:col-span-1",
+    icon: <IconSparkles />,
+  },
+  {
+    title: "Straight Answers",
+    description:
+      "No jargon, no account managers, no runaround — you talk directly to the person building your thing.",
+    icon: <IconMessageCircle />,
   },
 ];
+
+function Feature({
+  title,
+  description,
+  icon,
+  index,
+}: {
+  title: string;
+  description: React.ReactNode;
+  icon: React.ReactNode;
+  index: number;
+}) {
+  return (
+    <div
+      className={cn(
+        "group/feature relative flex flex-col border-line py-10 lg:border-r",
+        (index === 0 || index === 4) && "lg:border-l",
+        index < 4 && "lg:border-b",
+      )}
+    >
+      {index < 4 && (
+        <div className="pointer-events-none absolute inset-0 h-full w-full bg-gradient-to-t from-brand/10 to-transparent opacity-0 transition duration-200 group-hover/feature:opacity-100" />
+      )}
+      {index >= 4 && (
+        <div className="pointer-events-none absolute inset-0 h-full w-full bg-gradient-to-b from-brand/10 to-transparent opacity-0 transition duration-200 group-hover/feature:opacity-100" />
+      )}
+      <div className="relative z-10 mb-4 px-10 text-accent">{icon}</div>
+      <div className="relative z-10 mb-2 px-10 font-head text-lg font-bold">
+        <div className="absolute inset-y-0 left-0 h-6 w-1 origin-center rounded-tr-full rounded-br-full bg-liner transition-all duration-200 group-hover/feature:h-8 group-hover/feature:bg-brand" />
+        <span className="inline-block text-fg transition duration-200 group-hover/feature:translate-x-2">
+          {title}
+        </span>
+      </div>
+      <p className="relative z-10 max-w-xs px-10 text-sm leading-relaxed text-mut">{description}</p>
+    </div>
+  );
+}
 
 export function Services() {
   return (
     <section id="services" className="mx-auto w-full max-w-6xl scroll-mt-24 px-6 py-20">
       <SectionHeading eyebrow="What we do" title="Full-stack, full-service." />
-      <BentoGrid className="max-w-none md:auto-rows-[20rem]">
-        {items.map((item) => (
-          <BentoGridItem
-            key={item.title}
-            title={item.title}
-            description={item.description}
-            header={item.header}
-            icon={item.icon}
-            className={
-              "border-line bg-surface transition-colors hover:border-brand/50 dark:border-line dark:bg-surface dark:shadow-none " +
-              item.className
-            }
-          />
+      <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+        {features.map((feature, index) => (
+          <Feature key={feature.title} {...feature} index={index} />
         ))}
-      </BentoGrid>
+      </div>
     </section>
   );
 }

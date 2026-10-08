@@ -1,7 +1,7 @@
 "use client";
 
 import { FlipWords } from "@/components/ui/flip-words";
-import { Spotlight } from "@/components/ui/spotlight";
+import { BackgroundLines } from "@/components/ui/background-lines";
 import { MagneticButton } from "@/components/ui/magnetic-button";
 import { WxTerminal } from "./wx-terminal";
 
@@ -9,9 +9,11 @@ const verbs = ["design", "build", "ship", "repair", "caffeinate"];
 
 export function Hero() {
   return (
-    <section className="relative overflow-hidden">
-      <Spotlight className="-top-40 left-0 hidden dark:block md:-top-20 md:left-60" fill="#00a878" />
-      <div className="mx-auto grid w-full max-w-6xl items-center gap-14 px-6 pt-20 pb-16 md:min-h-[78vh] md:grid-cols-[1.05fr_0.95fr] md:pt-10">
+    <BackgroundLines
+      className="relative h-auto w-full overflow-hidden bg-transparent dark:bg-transparent"
+      svgOptions={{ duration: 12 }}
+    >
+      <div className="relative z-10 mx-auto grid w-full max-w-6xl items-center gap-14 px-6 pt-20 pb-16 md:min-h-[78vh] md:grid-cols-[1.05fr_0.95fr] md:pt-10">
         <div>
           <p className="mb-4 inline-flex items-center gap-2.5 rounded-full border border-line bg-surface/70 px-4 py-1.5 text-sm font-medium text-mut">
             <span className="relative flex h-2.5 w-2.5" aria-hidden>
@@ -55,6 +57,6 @@ export function Hero() {
           <WxTerminal />
         </div>
       </div>
-    </section>
+    </BackgroundLines>
   );
 }

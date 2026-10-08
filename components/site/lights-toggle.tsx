@@ -22,8 +22,7 @@ export function LightsToggle() {
       className="cursor-pointer font-mono text-sm text-mut transition-colors hover:text-accent"
       aria-label={dark ? "Turn on the lights (light mode)" : "Turn off the lights (dark mode)"}
     >
-      <span className="hidden lg:inline">{dark ? "turn_on_the_lights()" : "turn_off_the_lights()"}</span>
-      <span className="lg:hidden">{dark ? "lights_on()" : "lights_off()"}</span>
+      {dark ? "lights_on()" : "lights_off()"}
     </button>
   );
 }

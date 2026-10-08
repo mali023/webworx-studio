@@ -50,6 +50,12 @@
   --animate-spotlight: spotlight 2s ease 0.75s 1 forwards;
 }
 
+@keyframes wx-marquee {
+  to {
+    transform: translateX(calc(-50% - 0.5rem));
+  }
+}
+
 @keyframes spotlight {
   0% {
     opacity: 0;

@@ -55,19 +55,27 @@ const clients = [
   },
 ];
 
+function LogoChip({ client }: { client: (typeof clients)[number] }) {
+  return (
+    <li className="flex h-[100px] w-[180px] shrink-0 items-center justify-center rounded-xl border border-line bg-white px-5 transition-colors hover:border-brand/50">
+      <AnimatedTooltip items={[client]} />
+    </li>
+  );
+}
+
 export function Clients() {
   return (
     <section id="clients" className="mx-auto w-full max-w-6xl scroll-mt-24 px-6 py-20">
       <SectionHeading eyebrow="Who we work with" title="Brands we work with." />
-      <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-3 lg:grid-cols-7">
-        {clients.map((c) => (
-          <div
-            key={c.id}
-            className="flex min-h-[100px] items-center justify-center rounded-xl border border-line bg-white px-4 py-4 transition-all hover:-translate-y-1 hover:border-brand/50 hover:shadow-[0_14px_30px_rgba(13,31,26,0.1)]"
-          >
-            <AnimatedTooltip items={[c]} />
-          </div>
-        ))}
+      <div className="relative overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
+        <ul className="flex w-max items-center gap-4 py-2 [animation:wx-marquee_36s_linear_infinite] hover:[animation-play-state:paused]">
+          {clients.map((c) => (
+            <LogoChip key={c.id} client={c} />
+          ))}
+          {clients.map((c) => (
+            <LogoChip key={`dup-${c.id}`} client={{ ...c, id: c.id + 100 }} />
+          ))}
+        </ul>
       </div>
     </section>
   );

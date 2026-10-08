@@ -34,8 +34,8 @@ const HINT: Line = { kind: "hint", text: "this terminal is live — type help, o
 
 /* ---------- snake ---------- */
 
-const COLS = 30;
-const ROWS = 13;
+const COLS = 34;
+const ROWS = 16;
 const TICK_MS = 120;
 
 type Cell = [number, number];
@@ -57,9 +57,9 @@ function spawnFood(snake: Cell[]): Cell {
 
 function newGame(): Game {
   const snake: Cell[] = [
-    [8, 6],
-    [7, 6],
-    [6, 6],
+    [9, 8],
+    [8, 8],
+    [7, 8],
   ];
   return { snake, dir: [1, 0], nextDir: [1, 0], food: spawnFood(snake), score: 0 };
 }
@@ -426,7 +426,10 @@ export function WxTerminal({ className }: { className?: string }) {
         {/* content */}
         <div
           ref={contentRef}
-          className="no-visible-scrollbar relative h-80 cursor-text overflow-y-auto p-4"
+          className={cn(
+            "no-visible-scrollbar relative cursor-text overflow-y-auto p-4 transition-[height] duration-300",
+            phase === "game" ? "h-[27rem]" : "h-80",
+          )}
           aria-live="polite"
         >
           {phase !== "game" && (
@@ -470,8 +473,8 @@ export function WxTerminal({ className }: { className?: string }) {
           )}
 
           {phase === "game" && g && (
-            <div className="flex h-full flex-col items-center justify-center gap-2">
-              <div className="leading-[1.1] tracking-[0.08em]">
+            <div className="flex h-full flex-col items-center justify-center gap-3">
+              <div className="text-sm leading-[1.12] tracking-[0.08em]">
                 {Array.from({ length: ROWS }, (_, y) => (
                   <div key={y} className="whitespace-pre">
                     {Array.from({ length: COLS }, (_, x) => {

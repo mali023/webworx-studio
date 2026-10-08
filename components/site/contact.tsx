@@ -82,10 +82,22 @@ export function Contact() {
             Tell us what you&apos;re building — or what needs fixing — and we&apos;ll get
             back to you with straight answers, not a sales pitch.
           </p>
-          <p className="mt-6 text-sm text-mut">
-            We usually reply within{" "}
-            <span className="font-semibold text-fg">24 hours</span>.
-          </p>
+          <div className="mt-8 grid gap-4 text-sm">
+            <p className="flex items-center gap-3 text-mut">
+              <span className="flex h-9 w-9 items-center justify-center rounded-lg border border-brand/25 bg-brand/10 text-accent">✉</span>
+              <a href={`mailto:${CONTACT_EMAIL}`} className="font-medium text-fg hover:text-accent">
+                {CONTACT_EMAIL}
+              </a>
+            </p>
+            <p className="flex items-center gap-3 text-mut">
+              <span className="flex h-9 w-9 items-center justify-center rounded-lg border border-brand/25 bg-brand/10 text-accent">⌖</span>
+              Melbourne, Australia — working worldwide
+            </p>
+            <p className="flex items-center gap-3 text-mut">
+              <span className="flex h-9 w-9 items-center justify-center rounded-lg border border-brand/25 bg-brand/10 text-accent">↻</span>
+              We usually reply within <span className="font-semibold text-fg">24 hours</span>
+            </p>
+          </div>
         </div>
 
         <form
