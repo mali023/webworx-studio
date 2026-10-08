@@ -3,24 +3,9 @@
 import { FlipWords } from "@/components/ui/flip-words";
 import { Spotlight } from "@/components/ui/spotlight";
 import { MagneticButton } from "@/components/ui/magnetic-button";
-import { Terminal } from "@/components/ui/terminal";
+import { WxTerminal } from "./wx-terminal";
 
 const verbs = ["design", "build", "ship", "repair", "caffeinate"];
-
-const commands = [
-  "whoami",
-  "ls ./services",
-  "./new_project.sh --client you",
-];
-
-const outputs: Record<number, string[]> = {
-  0: ["webworx-studio — a digital studio in Melbourne, AU"],
-  1: [
-    "websites/   web-apps/   mobile-apps/",
-    "design/     social/     repairs/",
-  ],
-  2: ["✓ brief received", "✓ coffee brewed", "🚀 let's build"],
-};
 
 export function Hero() {
   return (
@@ -66,15 +51,8 @@ export function Hero() {
           </div>
         </div>
 
-        <div aria-hidden className="max-md:order-2">
-          <Terminal
-            commands={commands}
-            outputs={outputs}
-            username="webworx"
-            enableSound={false}
-            typingSpeed={45}
-            className="max-w-none px-0"
-          />
+        <div className="max-md:order-2">
+          <WxTerminal />
         </div>
       </div>
     </section>
